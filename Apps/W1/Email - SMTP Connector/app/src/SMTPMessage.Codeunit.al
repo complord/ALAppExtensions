@@ -92,10 +92,22 @@ codeunit 4514 "SMTP Message"
         EmailRecipientType: Enum "Email Recipient Type";
         AttachmentInStream: InStream;
         Body: Text;
+        FromName: Text[250];
+        FromAddress: Text[250];
         Recipients: List of [Text];
     begin
         // Add From
-        AddFrom(SMTPAccount."Sender Name", SMTPAccount."Email Address");
+        //AddFrom(SMTPAccount."Sender Name", SMTPAccount."Email Address");
+        if Message.GetFromAddress() <> '' then
+            FromAddress := Message.GetFromAddress()
+        else
+            FromAddress := SMTPAccount."Email Address";
+
+        if Message.GetFromName() <> '' then
+            FromName := Message.GetFromName()
+        else
+            FromName := SMTPAccount."Sender Name";
+        AddFrom(FromName, FromAddress);
 
         // Add "To" recipients
 #pragma warning disable AA0205
