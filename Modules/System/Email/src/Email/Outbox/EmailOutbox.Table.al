@@ -104,6 +104,13 @@ table 8888 "Email Outbox"
             DataClassification = CustomerContent;
             Description = 'The field is marked as internal in order to prevent modifying it from code.';
         }
+
+        field(15; "Send From Address"; Text[250])
+        {
+            Access = Internal;
+            DataClassification = EndUserIdentifiableInformation;
+            Description = 'The field is marked as internal in order to prevent modifying it from code.';
+        }
     }
 
     keys
@@ -121,7 +128,7 @@ table 8888 "Email Outbox"
         key(Status; Status)
         {
         }
-        key(StatusMessageId;  "Message Id",Status)
+        key(StatusMessageId; "Message Id", Status)
         {
         }
     }

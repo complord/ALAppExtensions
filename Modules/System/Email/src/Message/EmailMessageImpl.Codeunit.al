@@ -116,6 +116,16 @@ codeunit 8905 "Email Message Impl."
         exit(Message.Subject);
     end;
 
+    procedure GetFromAddress(): Text[250]
+    begin
+        exit(Message."From Address");
+    end;
+
+    procedure GetFromName(): Text[250]
+    begin
+        exit(Message."From Name");
+    end;
+
     procedure SetSubject(Subject: Text)
     begin
         Message.Subject := CopyStr(Subject, 1, MaxStrLen(Message.Subject));
@@ -129,6 +139,13 @@ codeunit 8905 "Email Message Impl."
     procedure SetBodyHTMLFormatted(Value: Boolean)
     begin
         Message."HTML Formatted Body" := Value;
+    end;
+
+    procedure SetFrom(FromName: Text[250]; FromAddress: Text[250])
+    begin
+        Message."From Name" := FromName;
+        Message."From Address" := FromAddress;
+        Message.Modify();
     end;
 
     procedure IsRead(): Boolean
