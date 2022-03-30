@@ -228,7 +228,11 @@ codeunit 8900 "Email Impl"
         EmailOutbox."Account Id" := AccountId;
         EmailOutbox.Description := CopyStr(EmailMessageImpl.GetSubject(), 1, MaxStrLen(EmailOutbox.Description));
         EmailOutbox."User Security Id" := UserSecurityId();
-        EmailOutbox."Send From" := CopyStr(SentFrom, 1, MaxStrLen(EmailOutbox."Send From"));
+        if EmailMessageImpl.GetFromName() <> '' then
+            EmailOutbox."Send From" := CopyStr(EmailMessageImpl.GetFromName(), 1, MaxStrLen(EmailOutbox."Send From"))
+        else
+            EmailOutbox."Send From" := CopyStr(SentFrom, 1, MaxStrLen(EmailOutbox."Send From"));
+        EmailOutbox."Send From Address" := EmailMessageImpl.GetFromAddress();
         EmailOutbox.Status := Status;
         if Status = Enum::"Email Status"::Queued then begin
             EmailOutbox."Date Queued" := CurrentDateTime();

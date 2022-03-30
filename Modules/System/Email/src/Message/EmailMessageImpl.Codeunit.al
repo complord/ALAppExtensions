@@ -127,7 +127,7 @@ codeunit 8905 "Email Message Impl."
 
         ReplaceRgbaColorsWithRgb(BodyText);
         Body := GetBody();
-        Message.Body.CreateOutStream(BodyOutStream, TextEncoding::UTF8);
+        EmailMessageRec.Body.CreateOutStream(BodyOutStream, TextEncoding::UTF8);
         BodyOutStream.Write(Body);
         BodyOutStream.Write(BodyText);
         Modify();
@@ -136,6 +136,16 @@ codeunit 8905 "Email Message Impl."
     procedure GetSubject(): Text[2048]
     begin
         exit(EmailMessageRec.Subject);
+    end;
+
+    procedure GetFromAddress(): Text[250]
+    begin
+        exit(EmailMessageRec."From Address");
+    end;
+
+    procedure GetFromName(): Text[250]
+    begin
+        exit(EmailMessageRec."From Name");
     end;
 
     procedure SetSubjectValue(Subject: Text)
@@ -163,6 +173,13 @@ codeunit 8905 "Email Message Impl."
     begin
         SetBodyHTMLFormattedValue(Value);
         Modify();
+    end;
+
+    procedure SetFrom(FromName: Text[250]; FromAddress: Text[250])
+    begin
+        EmailMessageRec."From Name" := FromName;
+        EmailMessageRec."From Address" := FromAddress;
+        EmailMessageRec.Modify();
     end;
 
     procedure IsRead(): Boolean
@@ -375,7 +392,7 @@ codeunit 8905 "Email Message Impl."
 
         if UniqueRecipients.Add(Recipient.ToLower(), Recipient) then begin // Set the recipient key to lowercase to prevent duplicates
             EmailRecipientRecord.Init();
-            EmailRecipientRecord."Email Message Id" := Message.Id;
+            EmailRecipientRecord."Email Message Id" := EmailMessageRec.Id;
             EmailRecipientRecord."Email Recipient Type" := RecipientType;
             EmailRecipientRecord."Email Address" := CopyStr(Recipient, 1, MaxStrLen(EmailRecipientRecord."Email Address"));
 
